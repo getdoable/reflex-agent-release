@@ -1,0 +1,20 @@
+{
+  "name": "reflex-agent-release",
+  "owner": {
+    "name": "Doable",
+    "email": "support@getdoable.ai"
+  },
+  "metadata": {
+    "description": "Reflex (Doable in the Loop) — verify your deployed web features actually work for real users.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "reflex",
+      "description": "Use when verifying that a deployed web feature actually works for real users — post-deployment / production verification. Drives a real browser against your live URL via the Reflex MCP tools (mcp__reflex__*).",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/reflex"]
+    }
+  ]
+}

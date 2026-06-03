@@ -1,0 +1,13 @@
+# Secrets — never commit a real Doable key
+.env
+.env.local
+
+# OS / editor
+.DS_Store
+*.swp
+
+# Node (if you add tooling later)
+node_modules/
+
+# Agent client local state
+.claude/settings.local.json
