@@ -50,8 +50,16 @@ your agent ──MCP──► Reflex MCP server ──► Doable ──► real 
 
 ## 3. Connecting
 
-The pre-wired [`.mcp.json`](../.mcp.json) in this repo already points at the
-hosted server:
+The Reflex MCP server is a **hosted endpoint** (`https://reflex.mcp.getdoable.ai/mcp`),
+so it isn't tied to any folder — register it once in the scope you want and it
+works from your own project directory. See the [README](../README.md) for the
+three install paths (plugin / `claude mcp add` / project `.mcp.json`); in short:
+
+- **All projects:** `claude mcp add --transport http --scope user reflex
+  https://reflex.mcp.getdoable.ai/mcp --header "Authorization: Bearer <key>"`,
+  or install the Claude Code plugin (registers server + skill).
+- **One project:** put this block in that project's `.mcp.json` (the bundled
+  file in the release repo is exactly this):
 
 ```json
 {

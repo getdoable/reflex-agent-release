@@ -1,9 +1,27 @@
 # Connecting an MCP client to Reflex
 
-Reflex serves MCP over Streamable HTTP at `POST /mcp`. Point your client
-at it with the Doable Bearer in the `Authorization` header.
+Reflex serves MCP over Streamable HTTP at `POST /mcp`. The server is a
+**hosted endpoint** (a URL), so it isn't tied to any directory — you
+register it once in the scope you want, then it's available wherever you
+work. Whatever's in the `Authorization` header is the Doable Bearer.
 
-## Claude Code (`.mcp.json` in the project root)
+## Registering the server (Claude Code)
+
+Pick a scope. All of these make the same `reflex` server available; they
+differ only in *where* it's available:
+
+- **User scope (all your projects):**
+  ```bash
+  claude mcp add --transport http --scope user reflex \
+    https://<your-reflex-host>/mcp \
+    --header "Authorization: Bearer <doable-api-key>"
+  ```
+- **Project scope (this project, committable):** write the block below into
+  the project's `.mcp.json`, or use `claude mcp add --scope project ...`.
+- **Plugin:** installing the Reflex Claude Code plugin registers the server
+  (and skill) automatically — no manual step.
+
+`.mcp.json` block (project scope, or the bundled file in the release repo):
 
 ```json
 {

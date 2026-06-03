@@ -15,57 +15,89 @@ Download it, set one API key, and start verifying.
 
 ---
 
-## Quick start
+## Install
 
-### 1. Get the repo
+Reflex has two pieces, and **neither is tied to this repo's folder** — you
+install them into whatever scope you work in, then use Reflex from **your own
+project directory**:
 
-```bash
-git clone https://github.com/getdoable/reflex-agent-release.git
-cd reflex-agent-release
-```
+- the **skill** — instructions your agent loads on demand, and
+- the **MCP server** — a **hosted endpoint** (`https://reflex.mcp.getdoable.ai/mcp`)
+  your agent calls. Because it's a URL, you just register it once; it then works
+  from any directory.
 
-### 2. Set your Doable API key
+Pick the path that matches how widely you want it available.
 
-Reflex forwards this key to Doable per request; it is never persisted or
-logged. Pick **one**:
+### Option A — Claude Code plugin (one step, every project)
 
-**Option A — environment variable (recommended).** `.mcp.json` already
-references `${QA_DOABLE_API_KEY}`:
-
-```bash
-cp .env.example .env
-# edit .env and set QA_DOABLE_API_KEY=<your-doable-api-key>
-set -a; source .env; set +a     # export it into this shell
-```
-
-Launch your agent **from this same shell** so the variable is in scope.
-
-**Option B — hardcode it.** Edit `.mcp.json` and replace
-`${QA_DOABLE_API_KEY}` with your literal key. This repo is yours locally —
-just don't commit the edited file back.
-
-> Don't have a key? Get one from your Doable account.
-
-### 3. Launch your agent from this folder
+Installs the skill **and** registers the MCP server at the user level, so both
+are available in every project you open. Nothing to copy into your repo.
 
 ```bash
-claude        # or your agent of choice
+claude plugin marketplace add getdoable/reflex-agent-release
+claude plugin install reflex@reflex-agent-release
 ```
 
-Verify the connection:
+### Option B — register the server + skill yourself
+
+Register the hosted MCP server once. Use `--scope user` for **all** your
+projects, or `--scope project` to write a `.mcp.json` into the current project
+(commit it to share with your team):
+
+```bash
+claude mcp add --transport http --scope user reflex \
+  https://reflex.mcp.getdoable.ai/mcp \
+  --header "Authorization: Bearer <your-doable-api-key>"
+```
+
+Install the skill globally (drop `--global` to scope it to the current project):
+
+```bash
+npx skills add getdoable/reflex-agent-release --global
+```
+
+### Option C — copy the config into your project
+
+Copy the `reflex` block from this repo's [`.mcp.json`](.mcp.json) into your own
+project's `.mcp.json`, and run `npx skills add getdoable/reflex-agent-release`
+in that project. Good when you want the config version-controlled with your app.
+
+> **Just trying it out?** Clone this repo and launch your agent inside it — the
+> bundled `.mcp.json` works as-is. For real work, install into your own project
+> (above) so you verify your app from your own codebase.
+
+## Set your Doable API key
+
+Reflex forwards this key to Doable per request; it's never persisted or logged.
+Whatever ends up in the MCP server's `Authorization` header is the key.
+
+- If you registered with `claude mcp add ... --header "Authorization: Bearer <key>"`
+  (Option B), the key is already baked in — nothing more to do.
+- If you're using a `.mcp.json` with the `${QA_DOABLE_API_KEY}` placeholder
+  (Options A/C, or the bundled file), provide the value from the environment in
+  the shell you launch your agent from, or replace the placeholder with the
+  literal key:
+
+```bash
+export QA_DOABLE_API_KEY=<your-doable-api-key>   # or add it to your shell profile
+```
+
+Verify it's connected (from your project):
 
 ```bash
 claude mcp list
 # reflex: https://reflex.mcp.getdoable.ai/mcp (HTTP) - ✓ Connected
 ```
 
-If you see `Missing environment variables: QA_DOABLE_API_KEY`, the key isn't
-exported — redo step 2 (Option A) in the launch shell, or use Option B.
+A `Missing environment variables: QA_DOABLE_API_KEY` warning means the
+placeholder didn't resolve — export the key (above) or bake it into the header.
 
-### 4. Ask it to verify your deployment
+> Don't have a key? Get one from your Doable account.
 
-You don't need to know the steps — the service is instruction-driven and the
-skill knows the flow. Just state the goal:
+## Use it
+
+From **your own project**, launch your agent and state the goal — the service
+is instruction-driven and the skill knows the flow, so you don't recite steps:
 
 > I just deployed a feature and want to confirm it works for real users.
 > Use the Reflex tools to verify my deployment.
@@ -76,31 +108,9 @@ skill knows the flow. Just state the goal:
 > a final verdict. If something's broken and I fix + redeploy, I'll give you
 > the new URL. When done, show me the report.
 
-That's it. The agent runs `init → start → … → finalize → report`, following
-each response's `instruction` field. `start` blocks 1–5 minutes while Doable
+The agent runs `init → start → … → finalize → report`, following each
+response's `instruction` field. `start` blocks 1–5 minutes while Doable
 generates and runs browser tests — that's expected.
-
----
-
-## Other ways to install
-
-### Agent Skills CLI (any compatible agent)
-
-```bash
-npx skills add getdoable/reflex-agent-release
-```
-
-You still configure the MCP server (`.mcp.json` + your Doable key) as above.
-
-### Claude Code plugin
-
-```bash
-# 1. Add this repo as a plugin marketplace
-claude plugin marketplace add getdoable/reflex-agent-release
-
-# 2. Install the Reflex plugin
-claude plugin install reflex@reflex-agent-release
-```
 
 ---
 
