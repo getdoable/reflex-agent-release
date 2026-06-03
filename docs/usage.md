@@ -67,11 +67,17 @@ three install paths (plugin / `claude mcp add` / project `.mcp.json`); in short:
     "reflex": {
       "type": "http",
       "url": "https://reflex.mcp.getdoable.ai/mcp",
+      "timeout": 660000,
       "headers": { "Authorization": "Bearer ${QA_DOABLE_API_KEY}" }
     }
   }
 }
 ```
+
+> **Tool-call timeout:** the `timeout` field (milliseconds) is required-in-
+> practice — `start` blocks 1–5 min, so without a generous per-server timeout
+> the client cuts the call off. `660000` (11 min) covers it. `MCP_TIMEOUT`
+> only governs server startup, not tool execution.
 
 Supply your Doable key one of two ways:
 

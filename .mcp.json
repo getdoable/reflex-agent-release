@@ -3,6 +3,7 @@
     "reflex": {
       "type": "http",
       "url": "https://reflex.mcp.getdoable.ai/mcp",
+      "timeout": 660000,
       "headers": {
         "Authorization": "Bearer ${QA_DOABLE_API_KEY}"
       }

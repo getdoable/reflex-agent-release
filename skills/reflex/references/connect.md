@@ -29,6 +29,7 @@ differ only in *where* it's available:
     "reflex": {
       "type": "http",
       "url": "https://<your-reflex-host>/mcp",
+      "timeout": 660000,
       "headers": { "Authorization": "Bearer <doable-api-key>" }
     }
   }
@@ -37,6 +38,18 @@ differ only in *where* it's available:
 
 - **Hosted:** set `url` to the Reflex endpoint your provider gave you.
 - **Local dev:** `http://127.0.0.1:8000/mcp`.
+
+## Tool-call timeout (important)
+
+The `start` tool blocks 1–5 minutes while Doable generates browser tests, so
+the MCP client's per-tool timeout must be generous or that call (and a long
+`wait_for_findings`) will be cut off client-side. In Claude Code, set the
+**`timeout` field (milliseconds) on the server entry** in `.mcp.json` — as
+shown above, `660000` (11 min) comfortably covers it. This is a hard
+wall-clock limit per tool call. (`MCP_TIMEOUT` only controls server *startup*,
+not tool execution, so it won't help here.) If you registered the server with
+`claude mcp add` instead, add the same `timeout` field to its entry in your
+config.
 
 ## Supplying the Doable key — pick one
 
