@@ -112,10 +112,14 @@ reflex-agent-release/
 ├── .claude-plugin/
 │   └── marketplace.json           # Claude Code plugin manifest
 ├── .env.example                   # The one key you need
+├── .gitignore                     # Protects .env / local secrets
+├── AGENTS.md                      # Cross-agent pointer to the skill
+├── LICENSE                        # MIT
+├── README.md                      # This file
 ├── skills/
 │   └── reflex/
 │       ├── SKILL.md               # The skill: principles, tools, when-to-use
-│       └── references/            # workflow, troubleshooting, connection
+│       └── references/            # workflow, troubleshooting, connect
 └── docs/
     └── usage.md                   # Full human-readable usage guide
 ```

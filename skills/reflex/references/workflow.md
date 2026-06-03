@@ -17,8 +17,10 @@ explains *why* it points where it does, not a sequence to hardcode.
 3. **Retrieve results.** Follow the instruction — usually
    **`wait_for_findings`**, which polls Doable server-side until the run
    reaches a results-bearing or terminal phase (optional
-   `max_wait_seconds`, `poll_interval_seconds`). You can instead poll
-   `get_status` yourself if you want event-by-event progress.
+   `max_wait_seconds` — default 1800, capped at 1800 = 30 min; and
+   `poll_interval_seconds`, 10–600). If it returns still non-terminal,
+   call it again. You can instead poll `get_status` yourself if you want
+   event-by-event progress.
 
 4. **`get_findings`** → the findings (each with `severity`,
    `test_case_id`, title, expected/actual, repro steps), the engine's

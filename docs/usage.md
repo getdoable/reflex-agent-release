@@ -124,7 +124,7 @@ values are the UUID returned by `init`.
 - `reflex__submit_fix` → `new_base_url` (corrected deploy), `commit_sha`,
   `notes`. Increments `fix_attempt_count`, capped at the server's fix cap
   (default 2).
-- `reflex__wait_for_findings` → `max_wait_seconds`, `poll_interval_seconds`.
+- `reflex__wait_for_findings` → `max_wait_seconds` (default 1800; **capped at 1800 = 30 min**, min 60), `poll_interval_seconds` (10–600). To wait longer than 30 min, call it again.
 - `reflex__get_status` → `since` (last-seen `event_id`; replays only newer
   events).
 
@@ -192,6 +192,7 @@ All errors use the envelope `{code, message, hint?, run_id?}`.
 | `doable_auth_rejected` | Doable rejected the Bearer (401) | Check the key is valid for the target org. |
 | `doable_timeout` | Doable transport cut off (504) | Retry; if `start` repeatedly times out, the deploy URL may be unreachable/gated. |
 | `doable_unreachable` | Can't reach the Doable backend (502) | Network issue upstream; retry. |
+| `doable_protocol_error` | Doable returned a malformed/unexpected response (502) | Usually transient — retry. If it persists, the Doable API contract may have changed. |
 | `validation_failed` | Bad request body (422) | Fix the argument shape (bad URL, malformed PRD). |
 | `payload_too_large` | PRD exceeds the size limit (413) | Trim the PRD (default limit 256 KB). |
 | `run_not_found` | Unknown `run_id` (404) | Use the `run_id` from `init`. |
