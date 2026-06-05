@@ -216,13 +216,17 @@ All errors use the envelope `{code, message, hint?, run_id?}`.
 | `rate_limited` | Quota exceeded (429) | Honor `Retry-After` (delta-seconds). |
 | `run_timed_out` | Run exceeded the hard ceiling | The run auto-failed; start a fresh run. |
 
-### Known Doable-side behaviors
+### Completion & known Doable-side behaviors
 
+- **A run completes when there's no active work** — Doable cancels cases whose
+  prerequisite failed and leaves them unrun; those don't block the run. It
+  finalizes on what actually ran (a blocking failure still yields a `fix`
+  recommendation) instead of waiting out the timeout.
 - **Initial test generation can take the full 5 minutes** — `start` blocking
   is expected.
 - **The browser run can stall.** If `wait_for_findings` runs well past ~10 min
   with no progress, `cancel` the run and start fresh. Reflex also auto-fails
-  runs that exceed the hard time ceiling.
+  runs that exceed the hard time ceiling (~24 h backstop).
 
 ---
 

@@ -75,10 +75,20 @@ those specific failed-and-blocking cases and keys the resolutions back by
 `test_case_id`. This is how "was *this* bug fixed?" is answered precisely
 rather than by re-running everything.
 
+## Completion (incl. blocked cases)
+
+A run is complete as soon as Doable has **no active work** — i.e. no case
+`in_progress` — not only when every case reaches `completed`. Doable cancels
+cases whose prerequisite failed and leaves them queued/unrun; those don't hold
+the run open. So a run finishes on what actually ran (a failing test that
+blocks others still yields a `fix` recommendation), instead of waiting out the
+timeout.
+
 ## Staleness / timeouts
 
 A non-terminal run that goes too long is handled automatically on read:
-past a soft threshold it's flagged `stale: true` with advice; past a hard
-ceiling the next `get_status`/`wait_for_findings` finalizes it to `failed`
-(`run_timed_out`). If you see this, the run won't recover — start a fresh
-run.
+past a soft threshold (~1 h) it's flagged `stale: true` with advice; past a
+hard ceiling (~24 h) the next `get_status`/`wait_for_findings` finalizes it to
+`failed` (`run_timed_out`). With completion-on-no-active-work above, the hard
+ceiling is only a backstop for genuinely hung runs. If you see `run_timed_out`,
+the run won't recover — start a fresh run.

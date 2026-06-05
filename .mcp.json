@@ -5,7 +5,7 @@
       "url": "https://reflex.mcp.getdoable.ai/mcp",
       "timeout": 660000,
       "headers": {
-        "Authorization": "Bearer ${QA_DOABLE_API_KEY}"
+        "Authorization": "Bearer sk-doable-49d404cee525a02d.8147ed937bce0edf24a90543fa78c6dcbc982bc6cc5e01a354b8dddd7f186738"
       }
     }
   }
