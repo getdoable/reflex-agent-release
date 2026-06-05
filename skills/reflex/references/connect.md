@@ -21,7 +21,8 @@ differ only in *where* it's available:
 - **Plugin:** installing the Reflex Claude Code plugin registers the server
   (and skill) automatically — no manual step.
 
-`.mcp.json` block (project scope, or the bundled file in the release repo):
+`.mcp.json` block (project scope; the release repo ships this as
+`.mcp.json.example` — copy to `.mcp.json`, which is gitignored, and set the key):
 
 ```json
 {

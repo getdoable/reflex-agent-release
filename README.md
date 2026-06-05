@@ -28,15 +28,18 @@ project directory**:
 
 Pick the path that matches how widely you want it available.
 
-### Option A — Claude Code plugin (one step, every project)
+### Option A — Claude Code plugin (skill, every project)
 
-Installs the skill **and** registers the MCP server at the user level, so both
-are available in every project you open. Nothing to copy into your repo.
+Installs the **skill** at the user level, available in every project you open.
 
 ```bash
 claude plugin marketplace add getdoable/reflex-agent-release
 claude plugin install reflex@reflex-agent-release
 ```
+
+Then register the MCP server once (the plugin does not ship a key-bearing
+`.mcp.json`, so configure the server with your key via Option B's
+`claude mcp add`).
 
 ### Option B — register the server + skill yourself
 
@@ -58,13 +61,15 @@ npx skills add getdoable/reflex-agent-release --global
 
 ### Option C — copy the config into your project
 
-Copy the `reflex` block from this repo's [`.mcp.json`](.mcp.json) into your own
-project's `.mcp.json`, and run `npx skills add getdoable/reflex-agent-release`
-in that project. Good when you want the config version-controlled with your app.
+Copy the `reflex` block from this repo's
+[`.mcp.json.example`](.mcp.json.example) into your own project's `.mcp.json`,
+set your key, and run `npx skills add getdoable/reflex-agent-release` in that
+project. Good when you want the config version-controlled with your app.
 
-> **Just trying it out?** Clone this repo and launch your agent inside it — the
-> bundled `.mcp.json` works as-is. For real work, install into your own project
-> (above) so you verify your app from your own codebase.
+> **Just trying it out?** Clone this repo, then
+> `cp .mcp.json.example .mcp.json`, set your key (below), and launch your agent
+> inside it. (`.mcp.json` is gitignored so your key never gets committed.) For
+> real work, install into your own project (above).
 
 ## Set your Doable API key
 
@@ -73,10 +78,10 @@ Whatever ends up in the MCP server's `Authorization` header is the key.
 
 - If you registered with `claude mcp add ... --header "Authorization: Bearer <key>"`
   (Option B), the key is already baked in — nothing more to do.
-- If you're using a `.mcp.json` with the `${QA_DOABLE_API_KEY}` placeholder
-  (Options A/C, or the bundled file), provide the value from the environment in
-  the shell you launch your agent from, or replace the placeholder with the
-  literal key:
+- If you copied `.mcp.json.example` → `.mcp.json` (Option C), it has the
+  `${QA_DOABLE_API_KEY}` placeholder — provide the value from the environment in
+  the shell you launch your agent from, or replace the placeholder with your
+  literal key (`.mcp.json` is gitignored, so a literal key won't be committed):
 
 ```bash
 export QA_DOABLE_API_KEY=<your-doable-api-key>   # or add it to your shell profile
@@ -118,7 +123,7 @@ generates and runs browser tests — that's expected.
 
 ```
 reflex-agent-release/
-├── .mcp.json                      # Pre-wired Reflex MCP server (hosted)
+├── .mcp.json.example              # MCP server template — copy to .mcp.json (gitignored), set your key
 ├── .claude-plugin/
 │   └── marketplace.json           # Claude Code plugin manifest
 ├── .env.example                   # The one key you need

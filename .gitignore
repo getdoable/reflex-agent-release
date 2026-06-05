@@ -11,3 +11,6 @@ node_modules/
 
 # Agent client local state
 .claude/settings.local.json
+
+# Real MCP config (copied from .mcp.json.example, holds your Doable key)
+.mcp.json

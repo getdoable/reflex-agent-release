@@ -58,8 +58,9 @@ three install paths (plugin / `claude mcp add` / project `.mcp.json`); in short:
 - **All projects:** `claude mcp add --transport http --scope user reflex
   https://reflex.mcp.getdoable.ai/mcp --header "Authorization: Bearer <key>"`,
   or install the Claude Code plugin (registers server + skill).
-- **One project:** put this block in that project's `.mcp.json` (the bundled
-  file in the release repo is exactly this):
+- **One project:** put this block in that project's `.mcp.json` (the release
+  repo ships it as `.mcp.json.example` — copy to `.mcp.json`, which is
+  gitignored, and set your key):
 
 ```json
 {

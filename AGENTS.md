@@ -7,7 +7,8 @@ live URL via the `mcp__reflex__*` MCP tools.
 - The skill is at [`skills/reflex/SKILL.md`](skills/reflex/SKILL.md) — load it
   when the user wants to verify, test, or confirm a **deployed** feature works
   (not for local unit/integration tests).
-- The MCP server is pre-configured in [`.mcp.json`](.mcp.json)
+- The MCP server config template is [`.mcp.json.example`](.mcp.json.example)
+  (copy to `.mcp.json`, which is gitignored, and set the key)
   (`https://reflex.mcp.getdoable.ai/mcp`). It needs the user's Doable API key
   in the `Authorization` header — see the README if a tool returns
   `missing_doable_key`.
