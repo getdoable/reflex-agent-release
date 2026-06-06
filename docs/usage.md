@@ -212,6 +212,7 @@ All errors use the envelope `{code, message, hint?, run_id?}`.
 | `payload_too_large` | PRD exceeds the size limit (413) | Trim the PRD (default limit 256 KB). |
 | `run_not_found` | Unknown `run_id` (404) | Use the `run_id` from `init`. |
 | `phase_conflict` | Tool not valid for the current phase (409) | Follow the `instruction` — call what it tells you. |
+| `already_started` | `start` called on a run that's already starting/started (409) | `start` is one-shot — don't retry it. If `start` timed out client-side it likely still succeeded; poll `get_status`/`get_run`. To verify again, `init` a new run. |
 | `fix_attempt_limit_reached` | `submit_fix` past the cap | `finalize` with `fail` (or `skip_fix`); no more fix attempts. |
 | `not_yet_available` | Report/findings requested too early | Wait for the phase the instruction names. |
 | `rate_limited` | Quota exceeded (429) | Honor `Retry-After` (delta-seconds). |

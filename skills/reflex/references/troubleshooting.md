@@ -16,6 +16,7 @@ Read the `code` and act on it; don't blindly retry.
 | `payload_too_large` | PRD exceeds the size limit (413) | Trim the PRD (default limit 256 KB). |
 | `run_not_found` | Unknown `run_id` (404) | Use the `run_id` returned by `init`. |
 | `phase_conflict` | Tool not valid for the run's current phase (409) | Follow the `instruction` — call what it tells you, not what you guessed. |
+| `already_started` | `start` called on a run that's already starting/started (409) | `start` is one-shot — don't retry it. If `start` timed out client-side it likely still succeeded; poll `get_status`/`get_run`. To verify again, `init` a new run. |
 | `fix_attempt_limit_reached` | `submit_fix` past the cap | No more fix attempts allowed. `finalize` with `fail` (or `skip_fix` if remaining issues are acceptable). |
 | `not_yet_available` | Report/findings requested too early | Wait for the phase the instruction names (use `wait_for_findings`). |
 | `rate_limited` | Per-IP quota exceeded (429) | Honor `Retry-After` (delta-seconds), then retry. |
