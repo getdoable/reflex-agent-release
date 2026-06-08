@@ -23,50 +23,26 @@ registered). The **skill** in this repo is *optional*: it gives your agent
 extra guidance, but the service is instruction-driven, so the tools work on
 their own without it.
 
-Pick **one** of the three self-contained options below.
+### 1. Register the MCP server (required)
 
-### Option A — Claude Code plugin (skill + server)
+Register the hosted server with your Doable key — this one step is enough to
+use Reflex:
 
-1. Install the skill (available in every project):
-   ```bash
-   claude plugin marketplace add getdoable/reflex-agent-release
-   claude plugin install reflex@reflex-agent-release
-   ```
-2. Register the MCP server with your key:
-   ```bash
-   claude mcp add --transport http --scope user reflex \
-     https://reflex.mcp.getdoable.ai/mcp \
-     --header "Authorization: Bearer <your-doable-api-key>"
-   ```
-3. Reload your agent, then [verify](#verify).
+```bash
+claude mcp add --transport http --scope user reflex \
+  https://reflex.mcp.getdoable.ai/mcp \
+  --header "Authorization: Bearer <your-doable-api-key>"
+```
 
-### Option B — npx skills (skill + server)
+Verify it connected:
 
-1. Install the skill (`--global` = every project; omit it for the current project only):
-   ```bash
-   npx skills add getdoable/reflex-agent-release --global
-   ```
-2. Register the MCP server with your key:
-   ```bash
-   claude mcp add --transport http --scope user reflex \
-     https://reflex.mcp.getdoable.ai/mcp \
-     --header "Authorization: Bearer <your-doable-api-key>"
-   ```
-3. Reload your agent, then [verify](#verify).
+```bash
+claude mcp list
+# reflex: https://reflex.mcp.getdoable.ai/mcp (HTTP) - ✓ Connected
+```
 
-### Option C — MCP server only (no skill, nothing from this repo)
-
-The skill is optional — to use Reflex with **nothing from this repo**, just
-register the hosted MCP server. The agent then follows each response's
-`instruction` field on its own.
-
-1. Register the MCP server with your key:
-   ```bash
-   claude mcp add --transport http --scope user reflex \
-     https://reflex.mcp.getdoable.ai/mcp \
-     --header "Authorization: Bearer <your-doable-api-key>"
-   ```
-2. Reload your agent, then [verify](#verify). That's the whole install.
+That's all you need — the service is instruction-driven, so your agent follows
+each response's next step on its own. Then jump to [Use it](#use-it).
 
 > **Scope:** `--scope user` makes the server available in every project (stored
 > in `~/.claude.json`). Swap in `--scope project` to write it into the current
@@ -75,12 +51,22 @@ register the hosted MCP server. The agent then follows each response's
 > **The key** is forwarded to Doable per request and never stored by Reflex.
 > Don't have one? Get it from your Doable account.
 
-### Verify
+### 2. (Optional) Add the skill
 
-```bash
-claude mcp list
-# reflex: https://reflex.mcp.getdoable.ai/mcp (HTTP) - ✓ Connected
-```
+The skill gives your agent extra guidance about Reflex. Skip it and Reflex
+still works (step 1 is enough). To add it, pick **one**:
+
+- **Claude Code plugin:**
+  ```bash
+  claude plugin marketplace add getdoable/reflex-agent-release
+  claude plugin install reflex@reflex-agent-release
+  ```
+- **npx skills** (`--global` = every project; omit for the current project only):
+  ```bash
+  npx skills add getdoable/reflex-agent-release --global
+  ```
+
+Then reload your agent.
 
 ## Use it
 
