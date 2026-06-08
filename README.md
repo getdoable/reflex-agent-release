@@ -25,14 +25,33 @@ their own without it.
 
 ### 1. Register the MCP server (required)
 
-Register the hosted server with your Doable key — this one step is enough to
-use Reflex:
+This one step is enough to use Reflex. Two ways:
+
+**Use this repo's preconfigured config (recommended).** It already points at
+the server *and* sets the per-call `timeout` the blocking `start` step needs:
+
+```bash
+git clone https://github.com/getdoable/reflex-agent-release.git
+cd reflex-agent-release
+cp .mcp.json.example .mcp.json   # then put your Doable key in the Authorization header
+```
+
+(Or copy the `reflex` block from [`.mcp.json.example`](.mcp.json.example) into
+your own project's `.mcp.json`.)
+
+**Or register via the CLI (no repo needed):**
 
 ```bash
 claude mcp add --transport http --scope user reflex \
   https://reflex.mcp.getdoable.ai/mcp \
   --header "Authorization: Bearer <your-doable-api-key>"
 ```
+
+> ⚠️ **Timeout matters.** `start` blocks 1–5 min while Doable runs the tests, so
+> the MCP client needs a generous per-call timeout. The repo's
+> `.mcp.json.example` sets `"timeout": 660000` (11 min) — if you register via
+> the CLI, add that `timeout` field to the `reflex` entry afterward, or the
+> client may cut `start` off.
 
 Verify it connected:
 
@@ -44,12 +63,11 @@ claude mcp list
 That's all you need — the service is instruction-driven, so your agent follows
 each response's next step on its own. Then jump to [Use it](#use-it).
 
-> **Scope:** `--scope user` makes the server available in every project (stored
-> in `~/.claude.json`). Swap in `--scope project` to write it into the current
-> project's `.mcp.json` instead (committable, shared with your team).
->
-> **The key** is forwarded to Doable per request and never stored by Reflex.
-> Don't have one? Get it from your Doable account.
+> **Scope / key:** `.mcp.json` in a project is shared with your team (commit it
+> — it holds only the `${QA_DOABLE_API_KEY}` placeholder; your real key stays
+> local). `claude mcp add --scope user` registers it for every project instead.
+> The key is forwarded to Doable per request and never stored by Reflex — get
+> one from your Doable account.
 
 ### 2. (Optional) Add the skill
 
